@@ -1,5 +1,5 @@
 import { inMemoryData } from '../mockData/users';
-import { SearchConditions } from '../services/users';
+import { SearchConditions } from '../services/users.service';
 
 export interface User {
     id: number;

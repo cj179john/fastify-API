@@ -2169,6 +2169,7 @@ __metadata:
     "@types/jest": ^28.1.6
     "@types/node": ^18.0.5
     fastify: ^4.2.1
+    fastify-plugin: ^4.0.0
     jest: ^28.1.3
     nodemon: ^2.0.19
     pino-pretty: ^8.1.0
@@ -2178,6 +2179,13 @@ __metadata:
     typescript: ^4.7.4
   languageName: unknown
   linkType: soft
+
+"fastify-plugin@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "fastify-plugin@npm:4.0.0"
+  checksum: b929f94e70e3815643842cd50bdfecd26ca2c34ef7a31b1570bd3fe7437174858e9bc4dfa70c2984340d5450c24b830d37fe4789c103ef80565dcc9037ae987a
+  languageName: node
+  linkType: hard
 
 "fastify@npm:^4.2.1":
   version: 4.2.1

@@ -1,5 +1,5 @@
 import { inMemoryData } from '../../src/mockData/users';
-import { IUserModel, User, UserDto, UserModel } from '../../src/models/User';
+import { IUserModel, User, UserDto, UserModel } from '../../src/models/user.model';
 
 describe('User Model', () => {
     let userModel: IUserModel;
