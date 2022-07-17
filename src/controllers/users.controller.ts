@@ -4,13 +4,13 @@ import {
     FastifyPluginAsync
   } from 'fastify';
   import fp from 'fastify-plugin';
-import { User, UserDto, UserModel } from '../models/user.model';
-import { UserService } from '../services/users.service';
+import { User, UserDto, UserModel } from '../models/user.model.js';
+import { UserService } from '../services/users.service.js';
 
 const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options: FastifyPluginOptions) => {
     const service = new UserService(new UserModel());
 
-    server.get('/users', {}, async (request, reply) => {
+    server.get('/', {}, async (request, reply) => {
           try {
               const users = await service.getAll();
               return reply.code(200).send(users.map(user => ({...user, id: undefined})));
@@ -20,7 +20,7 @@ const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options:
           }
       });
 
-    server.post<{ Body: UserDto }>('/users/user', {}, async (request, reply) => {
+    server.post<{ Body: UserDto }>('/user', {}, async (request, reply) => {
           try {
               const newUser = await service.add(request.body);
               return reply.code(201).send({...newUser, id: undefined});
@@ -30,7 +30,7 @@ const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options:
           }
       });
 
-    server.get<{ Params: {id: string} }>('/users/:id', {}, async (request, reply) => {
+    server.get<{ Params: {id: string} }>('/:id', {}, async (request, reply) => {
           try {
               const userId = request.params.id;
               const user = await service.getBy({id: userId});
@@ -44,7 +44,7 @@ const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options:
           }
       });
 
-    server.put<{ Body: User }>('/users', {}, async (request, reply) => {
+    server.put<{ Body: User }>('/', {}, async (request, reply) => {
         try {
             const user = request.body as User;
             const userToUpdate = await service.getBy({id: user.id});
@@ -61,7 +61,7 @@ const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options:
         }
     });
 
-    server.delete<{ Params: {id: string} }>('/users/:id', {}, async (request, reply) => {
+    server.delete<{ Params: {id: string} }>('/:id', {}, async (request, reply) => {
         try {
             const userId = request.params.id;
             const user = await service.getBy({id: userId});

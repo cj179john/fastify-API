@@ -1,11 +1,10 @@
 import fastify, { FastifyInstance } from 'fastify';
+import UsersRoutes from './controllers/users.controller.js';
 
 const build = (opts = {}): FastifyInstance => {
     const app = fastify(opts);
 
-    app.get('/ping', async (request, reply) => {
-      return 'pong\n';
-    });
+    app.register(UsersRoutes, {prefix: '/users'})
     return app;
 };
 

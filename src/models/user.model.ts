@@ -1,4 +1,4 @@
-import { inMemoryData } from '../mockData/users';
+import { inMemoryData } from '../mockData/users.js';
 import { SearchConditions } from '../services/users.service';
 
 export interface User {
