@@ -6,13 +6,16 @@
     "start": "node build/src/index.js",
     "test": "jest",
     "api-test": "jest ./tests/api",
+    "export-docs": "sh ./docs/scripts/export-docs.sh",
     "dev": "nodemon --watch './**/*.ts' --exec 'node --loader ts-node/esm' src/index.ts"
   },
   "dependencies": {
+    "@fastify/cors": "^8.0.0",
     "fastify": "^4.2.1",
     "fastify-plugin": "^4.0.0"
   },
   "devDependencies": {
+    "@fastify/swagger": "^7.4.1",
     "@types/jest": "^28.1.6",
     "@types/node": "^18.0.5",
     "@types/supertest": "^2.0.12",

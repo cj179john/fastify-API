@@ -3,7 +3,7 @@ import {
     FastifyPluginOptions,
     FastifyPluginAsync
   } from 'fastify';
-  import fp from 'fastify-plugin';
+import fp from 'fastify-plugin';
 import { User, UserDto, UserModel } from '../models/user.model';
 import { UserService } from '../services/users.service';
 
