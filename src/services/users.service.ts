@@ -4,7 +4,7 @@ export type SearchConditions = Partial<Record<keyof User, string | number>>;
 
 export interface IUserService {
     getAll: () => Promise<User[]>;
-    getBy: (condition: Record<string, string>) => Promise<User[]>;
+    getOneBy: (condition: Record<string, string>) => Promise<User | void>;
     add: (userDto: UserDto) => Promise<User | void>;
     update: (user: User) => Promise<User | void>;
     delete: (id: number) => Promise<void>;
@@ -17,8 +17,9 @@ export class UserService implements IUserService {
         return await this.model.getAll();
     }
 
-    async getBy(conditions: SearchConditions) {
-        return await this.model.get(conditions);
+    async getOneBy(conditions: SearchConditions) {
+        const result = await this.model.get(conditions);
+        return result[0];
     }
 
     async add(userDto: UserDto) {

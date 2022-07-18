@@ -4,78 +4,81 @@ import {
     FastifyPluginAsync
   } from 'fastify';
   import fp from 'fastify-plugin';
-import { User, UserDto, UserModel } from '../models/user.model.js';
-import { UserService } from '../services/users.service.js';
+import { User, UserDto, UserModel } from '../models/user.model';
+import { UserService } from '../services/users.service';
+
+const service = new UserService(new UserModel());
 
 const UsersRoutes: FastifyPluginAsync = async (server: FastifyInstance, options: FastifyPluginOptions) => {
-    const service = new UserService(new UserModel());
-
-    server.get('/', {}, async (request, reply) => {
+    server.get('/users', {}, async (request, reply) => {
           try {
               const users = await service.getAll();
               return reply.code(200).send(users.map(user => ({...user, id: undefined})));
           } catch (error) {
               request.log.error(error);
-              return reply.send(500);
+              return reply.code(400).send();
           }
       });
 
-    server.post<{ Body: UserDto }>('/user', {}, async (request, reply) => {
+    server.post<{ Body: UserDto }>('/users/user', {}, async (request, reply) => {
           try {
               const newUser = await service.add(request.body);
               return reply.code(201).send({...newUser, id: undefined});
           } catch (error) {
               request.log.error(error);
-              return reply.send(500);
+              return reply.code(400).send();
           }
       });
 
-    server.get<{ Params: {id: string} }>('/:id', {}, async (request, reply) => {
+    server.get<{ Params: {id: string} }>('/users/user/:id', {}, async (request, reply) => {
           try {
-              const userId = request.params.id;
-              const user = await service.getBy({id: userId});
+              const userId = parseInt(request.params.id);
+              const user = await service.getOneBy({id: userId});
+
               if (!user) {
-                  return reply.send(404);
+                  return reply.code(404).send();
               }
               return reply.code(200).send({...user, id: undefined});
           } catch (error) {
               request.log.error(error);
-              return reply.send(400);
+              return reply.code(400).send();
           }
       });
 
-    server.put<{ Body: User }>('/', {}, async (request, reply) => {
+    server.put<{ Body: User, Params: {id: string} }>('/users/user/:id', {}, async (request, reply) => {
         try {
+            const userId = parseInt(request.params.id);
             const user = request.body as User;
-            const userToUpdate = await service.getBy({id: user.id});
+
+            const userToUpdate = await service.getOneBy({id: userId});
 
             if (!userToUpdate) {
-                return reply.send(404);
+                return reply.code(404).send();
             }
 
             const result = await service.update(user);
             return reply.code(200).send({...result, id: undefined});
         } catch (error) {
             request.log.error(error);
-            return reply.send(400);
+            return reply.code(400).send();
         }
     });
 
-    server.delete<{ Params: {id: string} }>('/:id', {}, async (request, reply) => {
+    server.delete<{ Params: {id: string} }>('/users/user/:id', {}, async (request, reply) => {
         try {
-            const userId = request.params.id;
-            const user = await service.getBy({id: userId});
+            const userId = parseInt(request.params.id);
+            const user = await service.getOneBy({id: userId});
 
             if (!user) {
-                return reply.send(404);
+                return reply.code(404).send();
             }
 
-            await service.delete(parseInt(userId));
+            await service.delete(userId);
 
-            return reply.code(200).send('User is deleted');
+            return reply.code(200).send({message: 'User is deleted'});
         } catch (error) {
             request.log.error(error);
-            return reply.send(400);
+            return reply.code(400).send();
         }
     });
   };
